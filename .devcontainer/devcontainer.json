@@ -1,5 +1,6 @@
 {
     "name": "my-alooha-chat",
     "dockerComposeFile": "../env-config/docker-compose.yml",
-    "service": "my-alooha-chat"
+    "service": "my-alooha-chat",
+    "workspaceFolder": "/home/myaloohachat/app"
 }
