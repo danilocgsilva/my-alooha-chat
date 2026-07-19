@@ -1,0 +1,14 @@
+services:
+  my-alooha-chat:
+    build:
+      context: .
+    container_name: my-alooha-chat
+    volumes:
+      - './app:/app'
+    working_dir: /app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PORT=${PORT:-8080}
+    ports:
+      - "${PORT:-8099}:${PORT:-8099}"
