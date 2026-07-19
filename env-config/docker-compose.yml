@@ -4,7 +4,10 @@ services:
       context: .
     container_name: my-alooha-chat
     volumes:
-      - './:/home/myaloohachat/app'
+      - './../:/home/myaloohachat/app'
+      - '/home/myaloohachat/app/dev-management'
+      - '/home/myaloohachat/app/env-config'
+      - '/home/myaloohachat/app/.devcontainer'
     working_dir: /home/myaloohachat/app
     extra_hosts:
       - "host.docker.internal:host-gateway"

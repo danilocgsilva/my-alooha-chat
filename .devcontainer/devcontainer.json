@@ -1,0 +1,5 @@
+{
+    "name": "my-alooha-chat",
+    "dockerComposeFile": "../env-config/docker-compose.yml",
+    "service": "my-alooha-chat"
+}
