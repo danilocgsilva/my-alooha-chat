@@ -1,4 +1,8 @@
-# app
+# My Alooha Chat
+
+A frontend to connect to Alooha Proxy (https://github.com/danilocgsilva/alooha_proxy) or directly with Ollama.
+
+It is like the Chatooha Chat (https://github.com/danilocgsilva/chatooha-chat), but offers an interface more familiar if compared to other chat ai products.
 
 ## Project setup
 ```
