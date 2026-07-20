@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chat-container {
+            height: calc(100vh - 64px);
+        }
+        .message-sent {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+        }
+        .message-received {
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+        }
+        .dark .message-sent {
+            background-color: #1e3a8a;
+            border-color: #3b82f6;
+        }
+        .dark .message-received {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .typing-indicator span {
+            animation: typing 1.4s infinite;
+            display: inline-block;
+            width: 4px;
+            height: 12px;
+            background-color: #3b82f6;
+            border-radius: 2px;
+            margin-right: 2px;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="h-full bg-gray-50 dark:bg-dark-900 transition-colors duration-300">
+    <div id="app" class="h-full flex flex-col">
+        <!-- Header with Theme Switcher -->
+        <header class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white">AI Assistant</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors">
+                    <i class="fas fa-moon hidden dark:block"></i>
+                    <i class="fas fa-sun block dark:hidden"></i>
+                </button>
+                
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center text-white font-semibold">
+                        U
+                    </div>
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="flex-1 overflow-hidden chat-container">
+            <div class="h-full flex flex-col">
+                <!-- Messages Area -->
+                <div id="messages" class="flex-1 overflow-y-auto p-4 scrollbar-hide space-y-4">
+                    <!-- Welcome Message -->
+                    <div class="flex justify-center">
+                        <div class="max-w-md text-center py-4 px-6 bg-gray-100 dark:bg-dark-700 rounded-lg">
+                            <p class="text-gray-700 dark:text-gray-300">Hello! I'm your AI assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+
+                    <!-- Received Message -->
+                    <div class="flex justify-start">
+                        <div class="max-w-xs md:max-w-md message-received rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                            <div class="flex items-center mb-1">
+                                <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                                    <i class="fas fa-robot text-white text-xs"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">AI Assistant</span>
+                            </div>
+                            <p class="text-gray-800 dark:text-gray-200">Hello! I'm your AI assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+
+                    <!-- Sent Message -->
+                    <div class="flex justify-end">
+                        <div class="max-w-xs md:max-w-md message-sent rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
+                            <div class="text-gray-800 dark:text-gray-200">Can you explain how AI works in simple terms?</div>
+                        </div>
+                    </div>
+
+                    <!-- Received Message -->
+                    <div class="flex justify-start">
+                        <div class="max-w-xs md:max-w-md message-received rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                            <div class="flex items-center mb-1">
+                                <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                                    <i class="fas fa-robot text-white text-xs"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">AI Assistant</span>
+                            </div>
+                            <p class="text-gray-800 dark:text-gray-200">Sure! AI stands for Artificial Intelligence. It's like teaching computers to think and learn like humans. For example, when you ask me a question, I process your words, understand the context, and generate a helpful response.</p>
+                        </div>
+                    </div>
+
+                    <!-- Sent Message -->
+                    <div class="flex justify-end">
+                        <div class="max-w-xs md:max-w-md message-sent rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
+                            <div class="text-gray-800 dark:text-gray-200">That's interesting! What are some real-world applications?</div>
+                        </div>
+                    </div>
+
+                    <!-- Received Message -->
+                    <div class="flex justify-start">
+                        <div class="max-w-xs md:max-w-md message-received rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                            <div class="flex items-center mb-1">
+                                <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                                    <i class="fas fa-robot text-white text-xs"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">AI Assistant</span>
+                            </div>
+                            <p class="text-gray-800 dark:text-gray-200">AI is used in many areas: virtual assistants like Siri and Alexa, self-driving cars, medical diagnosis, fraud detection in banking, personalized recommendations on Netflix or Amazon, and even in creative fields like generating art or music.</p>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div class="flex justify-start">
+                        <div class="max-w-xs md:max-w-md message-received rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                            <div class="flex items-center mb-1">
+                                <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                                    <i class="fas fa-robot text-white text-xs"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">AI Assistant</span>
+                            </div>
+                            <div class="typing-indicator flex items-center">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="border-t border-gray-200 dark:border-dark-700 p-4 bg-white dark:bg-dark-800">
+                    <div class="flex items-center">
+                        <button class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-dark-700">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="flex-1 mx-2">
+                            <input 
+                                type="text" 
+                                id="message-input" 
+                                placeholder="Type your message..." 
+                                class="w-full px-4 py-3 bg-gray-100 dark:bg-dark-700 rounded-full focus:outline-none focus:ring-2 focus:ring-primary text-gray-800 dark:text-white"
+                            >
+                        </div>
+                        <button id="send-button" class="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all shadow-md">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference or respect OS setting
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        htmlElement.classList.add(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            
+            // Save preference
+            const currentTheme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', currentTheme);
+        });
+        
+        // Handle message sending
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const messagesContainer = document.getElementById('messages');
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                // Add user message
+                addMessage(message, 'sent');
+                messageInput.value = '';
+                
+                // Simulate AI response after a delay
+                setTimeout(() => {
+                    addMessage("I'm an AI assistant designed to help with your questions. How else can I assist you today?", 'received');
+                }, 1000);
+            }
+        }
+        
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('flex', type === 'sent' ? 'justify-end' : 'justify-start');
+            
+            const contentClass = type === 'sent' 
+                ? 'message-sent rounded-2xl rounded-tr-none px-4 py-3 shadow-sm' 
+                : 'message-received rounded-2xl rounded-tl-none px-4 py-3 shadow-sm';
+                
+            messageDiv.innerHTML = `
+                <div class="max-w-xs md:max-w-md ${contentClass}">
+                    ${type === 'received' ? `
+                        <div class="flex items-center mb-1">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                                <i class="fas fa-robot text-white text-xs"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">AI Assistant</span>
+                        </div>
+                    ` : ''}
+                    <p class="text-gray-800 dark:text-gray-200">${text}</p>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Initial scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    </script>
+</body>
+</html>
