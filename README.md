@@ -5,6 +5,9 @@ A frontend to connect to Alooha Proxy (https://github.com/danilocgsilva/alooha_p
 It is like the Chatooha Chat (https://github.com/danilocgsilva/chatooha-chat), but offers an interface more familiar if compared to other chat ai products.
 
 ## Project setup
+
+**NOTE**: Don't you forget to create the `.env` file based on `.env.example`.
+
 ```
 npm install
 ```
